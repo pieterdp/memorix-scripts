@@ -71,11 +71,13 @@ function store_values (values) {
 	var ov_id = document.getElementById ('oud_inventarisnummer');
 	if (ov_id.value == '') {
 		ov_id.value = values.ov[0];
+		ov_id.setAttribute ("class", "changed");
 	} /* As this cannot be repeated, we ignore the values from notes */
 	/* dubbel_van */
 	var dv_id = document.getElementById ('dubbel_van');
 	if (dv_id.value == '') {
 		dv_id.value = values.dv[0];
+		dv_id.setAttribute ("class", "changed");
 	}
 	/* Empty notities */
 	var not_id = document.getElementById ('notities');
