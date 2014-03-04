@@ -20,8 +20,10 @@ function parse_not (not_cont) {
 	//Oud inventarisnummer: 01300101024
 	//Dubbel van: xxxxx
 	var values = new Object;
-	var ov_patt = /oud inventarisnummer(?: |: )[0-9a-z]+/i;
-	var dv_patt = /dubbel van(?: |: )[0-9a-z]+/gi;
+	//var ov_patt = /oud inventarisnummer(?: |: )[0-9a-z]+/i;
+	var ov_patt = /oud inventarisnummer\s*:?\s*[0-9a-z]+/i;
+	//var dv_patt = /dubbel van(?: |: )[0-9a-z]+/gi;
+	var dv_patt = /dubbel van\s*:?\s*[0-9a-z]+/gi;
 	if (ov_patt.test (not_cont) == true) {
 		values.ov = parse_ov (not_cont);
 	}
@@ -38,7 +40,7 @@ function parse_not (not_cont) {
  */
 function parse_ov (not_cont) {
 	var ovs = Array ();
-	var ov_patt = /oud inventarisnummer(?: |: )([0-9a-z]+)/gi;
+	var ov_patt = /oud inventarisnummer\s*:?\s*([0-9a-z]+)/gi;
 	var matches = ov_patt.exec (not_cont);
 	/*if (matches.length > 2) { /* Means multiple matches *//*
 	}*/
@@ -52,7 +54,8 @@ function parse_ov (not_cont) {
  * @return array dubbel_vans
  */
 function parse_dv (not_cont) {
-	var dv_patt = /dubbel van(?: |: )([0-9a-z]+)/gi;
+	//var dv_patt = /dubbel van(?: |: )([0-9a-z]+)/gi;
+	var dv_patt = /dubbel van\s*:?\s*([0-9a-z]+)/gi;
 	var matches = Array ();
 	var match;
 	while ((match = dv_patt.exec (not_cont)) !== null) {
@@ -69,21 +72,21 @@ function parse_dv (not_cont) {
 function store_values (values) {
 	/* oud_inventarisnummer */
 	var ov_id = document.getElementById ('oud_inventarisnummer');
-	if (ov_id.value == '') {
+	if (ov_id.value == '' && typeof (values.ov) != "undefined") {
 		ov_id.value = values.ov[0];
 		ov_id.setAttribute ("class", "changed");
 	} /* As this cannot be repeated, we ignore the values from notes */
 	/* dubbel_van */
 	var dv_id = document.getElementById ('dubbel_van');
-	if (dv_id.value == '') {
+	if (dv_id.value == '' && typeof (values.dv) != "undefined") {
 		dv_id.value = values.dv[0];
 		dv_id.setAttribute ("class", "changed");
 	}
 	/* Empty notities */
 	var not_id = document.getElementById ('notities');
 	var not_cont = not_id.innerHTML;
-	not_cont = not_cont.replace (/dubbel van( |: )[0-9a-z]+/gi, '');
-	not_cont = not_cont.replace (/oud inventarisnummer( |: )[0-9a-z]+/gi, '');
+	not_cont = not_cont.replace (/dubbel van\s*:?\s*[0-9a-z]+/gi, '');
+	not_cont = not_cont.replace (/oud inventarisnummer\s*:?\s*[0-9a-z]+/i, '');
 	not_id.innerHTML = not_cont;
 	return true;
 }
